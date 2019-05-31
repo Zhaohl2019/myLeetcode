@@ -1,0 +1,87 @@
+题目：给定一个字符串，请你找出其中不含有重复字符的 最长子串 的长度。
+
+示例 1:
+
+输入: "abcabcbb"
+输出: 3 
+解释: 因为无重复字符的最长子串是 "abc"，所以其长度为 3。
+示例 2:
+
+输入: "bbbbb"
+输出: 1
+解释: 因为无重复字符的最长子串是 "b"，所以其长度为 1。
+示例 3:
+
+输入: "pwwkew"
+输出: 3
+解释: 因为无重复字符的最长子串是 "wke"，所以其长度为 3。
+     请注意，你的答案必须是 子串 的长度，"pwke" 是一个子序列，不是子串。
+	 
+题解：
+#Python
+//1：--404ms
+class Solution:
+    def lengthOfLongestSubstring(self, s: str) -> int:
+        num=[0]
+        for j in range(len(s)):
+            st=''
+            for i in s[j:]:
+                if(i not in st):
+                    st+=i
+                else:
+                    break
+            num.append(len(st))
+        return max(list(map(int,num)))
+//2:--200ms
+class Solution:
+        def lengthOfLongestSubstring(self, s):
+        # https://leetcode.com/articles/longest-substring-without-repeating-characters/
+            charMap = {}
+            for i in range(256):
+                charMap[i] = -1
+            ls = len(s)
+            i = max_len = 0
+            for j in range(ls):
+                # Note that when charMap[ord(s[j])] >= i, it means that there are
+                # duplicate character in current i,j. So we need to update i.
+                if charMap[ord(s[j])] >= i:
+                    i = charMap[ord(s[j])] + 1
+                charMap[ord(s[j])] = j
+                max_len = max(max_len, j - i + 1)
+            return max_len
+#cpp
+//1:use map--32ms
+int lengthOfLongestSubstring(string s) {
+    map<char, int> m;
+    int maxLen = 0;
+    int lastRepeatPos = -1;
+    for(int i=0; i<s.size(); i++){
+        if (m.find(s[i])!=m.end() && lastRepeatPos < m[s[i]]) {
+            lastRepeatPos = m[s[i]];
+        }
+        if ( i - lastRepeatPos > maxLen ){
+            maxLen = i - lastRepeatPos;
+        }
+        m[s[i]] = i;
+    }
+    return maxLen;
+}
+//2:don't use map--4ms
+int lengthOfLongestSubstring(string s) {
+    const int MAX_CHARS = 256;
+    int m[MAX_CHARS];
+    memset(m, -1, sizeof(m));
+
+    int maxLen = 0;
+    int lastRepeatPos = -1;
+    for(int i=0; i<s.size(); i++){
+        if (m[s[i]]!=-1 && lastRepeatPos < m[s[i]]) {
+            lastRepeatPos = m[s[i]];
+        }
+        if ( i - lastRepeatPos > maxLen ){
+            maxLen = i - lastRepeatPos;
+        }
+        m[s[i]] = i;
+    }
+    return maxLen;
+}
