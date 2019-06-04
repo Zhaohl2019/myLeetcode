@@ -1,0 +1,78 @@
+题目：给定一个在 0 到 9 之间的整数 d，和两个正整数 low 和 high 分别作为
+上下界。返回 d 在 low 和 high 之间的整数中出现的次数，包括边界 low 和 high。
+示例 1：
+输入：d = 1, low = 1, high = 13
+输出：6
+解释： 
+数字 d=1 在 1,10,11,12,13 中出现 6 次。注意 d=1 在数字 11 中出现两次。
+示例 2：
+输入：d = 3, low = 100, high = 250
+输出：35
+解释：
+数字 d=3 在 103,113,123,130,131,...,238,239,243 出现 35 次。
+
+题解：
+#cpp
+#1:
+class Solution {
+public:
+    vector<int> f(int n){ 
+        vector<int>dev(10,0);//不定长数组dev[i]存放i在0到n之间出现的次数
+        if(n==0)return dev;
+		for(int i=1;i<=n;i*=10){
+			print('i=%d\n',i);
+			int a=(n/i)/10;
+			print('a=%d\n',a);
+			for(int j=0;j<10;j++){
+				dev[j]+=a*i;
+				print(
+			dev[0]-=i;
+			for(int j=0;j<(n/i)%10;j++)dev[j]+=i;
+			dev[(n/i)%10]+= (n%i)+1;
+		}
+        return dev;
+    }
+
+    int digitsCount(int d, int low, int high) {
+        vector<int>a=f(high);
+        vector<int>b=f(low-1);
+        return a[d]-b[d];
+    }
+};
+#2:
+class Solution {
+public:
+    long long p[15], f[15][10][10], g[15][10], v[2][10];
+    int digitsCount(int d, int low, int high) {
+        for (int i = 0; i < 10; i++) f[0][i][i] = g[0][i] = 1;
+        p[0] = 1;
+        for (int i = 1; i < 10; ++i) {
+            p[i] = p[i-1]*10;
+            for (int j = 0; j < 10; ++j) {
+                f[i][j][j] = p[i];
+                for (int k = 0; k < 10; ++k) {
+                    f[i][j][k] += g[i-1][k];
+                    g[i][k] += f[i][j][k];
+                }
+            }
+        }
+        cal(high + 1, v[0]);
+        cal(low, v[1]);
+        return v[0][d] - v[1][d];
+    }
+    void cal(int x, long long a[10]) {
+        long long b[15];
+        int n = 0;
+        for (long long y = x; y; y /= 10)
+            b[n++] = y % 10;
+        for (int i = 0; i < n-1; ++i)
+            for (int j = 0; j < 10; ++j)
+                a[j] += g[i][j] - f[i][0][j];
+        for (int i = n-1; i >= 0; --i)
+            for (int j = (i == n-1); j < b[i]; ++j)
+                for (int k = 0; k < 10; ++k)
+                    a[k] += f[i][j][k];
+        for (long long i = 1, y = b[0]; i < n; y = y + b[i]*p[i], ++i)
+            a[b[i]] += y;
+    }
+};
