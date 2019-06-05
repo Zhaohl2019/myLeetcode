@@ -1,5 +1,5 @@
 # myLeetcode
-[1.两数之和](https://github.com/Zhaohl2019/myLeetcode/blob/master/1.%E4%B8%A4%E6%95%B0%E4%B9%8B%E5%92%8C.txt)
+[1.两数之和](https://github.com/Zhaohl2019/myLeetcode/blob/master/code/1.%E4%B8%A4%E6%95%B0%E4%B9%8B%E5%92%8C.txt)
 
 [2.两数相加](https://github.com/Zhaohl2019/myLeetcode/blob/master/code/2.%E4%B8%A4%E6%95%B0%E7%9B%B8%E5%8A%A0.txt)
 
